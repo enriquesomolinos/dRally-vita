@@ -1,7 +1,13 @@
 #include "drally.h"
 
+#ifdef PSVITA
+	#define W_WIDTH 	320//1024//800//1024//640
+	#define W_HEIGHT 	200//768//600//768//480
+#endif // PSVITA
+#ifndef PSVITA
 #define W_WIDTH 	1024//800//1024//640
 #define W_HEIGHT 	768//600//768//480
+#endif 
 
 
 #pragma pack(1)
@@ -140,7 +146,7 @@ void __PRESENTSCREEN__(void){
 		SDL_RenderPresent(GX.Renderer);
 		SDL_DestroyTexture(GX.Texture);
 		GX.Texture = NULL;
-	}
+	}	
 }
 
 void __VGA13_PRESENTSCREEN__(void){
@@ -195,7 +201,10 @@ void dRally_Display_init(void){
 	//if(!GX.VGA13.Surface) GX.VGA13.Surface = SDL_CreateRGBSurfaceFrom(VGA13_ACTIVESCREEN_X2, 2*320, 2*200, 8, 2*320, 0, 0, 0, 0);
 	if(!GX.VGA13.Surface) GX.VGA13.Surface = SDL_CreateRGBSurfaceFrom(VGA13_ACTIVESCREEN, 320, 200, 8, 320, 0, 0, 0, 0);
 	if(!GX.VESA101.Surface) GX.VESA101.Surface = SDL_CreateRGBSurfaceFrom(VESA101_ACTIVESCREEN, 640, 480, 8, 640, 0, 0, 0, 0);
-
+	int flags = SDL_WINDOW_HIDDEN;
+#ifdef PSVITA 
+	flags = flags || SDL_WINDOW_MAXIMIZED;
+#endif
 	if(!GX.Window){
 
 		GX.Window = SDL_CreateWindow(
@@ -204,14 +213,15 @@ void dRally_Display_init(void){
 			SDL_WINDOWPOS_CENTERED,       	// initial y position
 			W_WIDTH,                  			// width, in pixels
 			W_HEIGHT,							// height, in pixels
-			SDL_WINDOW_HIDDEN				// flags - see below
+			flags		// flags - see below
 		);
 	}
 
 	if(!GX.Renderer){
 
-		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 		GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_ACCELERATED);
+		
 		//GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_SOFTWARE);
 	}
 }

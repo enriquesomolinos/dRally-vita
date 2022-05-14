@@ -145,8 +145,14 @@ void menu_main(void){
 		dRally_System_clean();
 		exit(0x70);
 	}
-
+#ifdef PSVITA
 	___605deh_cdecl(0x3c, 0);
+
+#else
+	___605deh_cdecl(0x3c, 0);
+
+#endif // DEBUG
+
 	___117d4h();
 	//___3d38ch();	// APOGEE/GT/REMEDY
 	___3d890h();

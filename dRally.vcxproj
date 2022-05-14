@@ -14,12 +14,13 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{D139A586-092D-4107-B497-ACBB6A3B6B36}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -39,7 +40,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\lib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\lib\include;$(IncludePath);$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\include;$(IncludePath)</IncludePath>
@@ -420,7 +423,7 @@
     <ClCompile Include="drencryption.c" />
   </ItemGroup>
   <ItemGroup>
-  	<ClInclude Include="assets.h" />
+    <ClInclude Include="assets.h" />
     <ClInclude Include="bpa.h" />
     <ClInclude Include="dos.h" />
     <ClInclude Include="drally_fonts.h" />
@@ -439,8 +442,12 @@
     <ClInclude Include="mod_xm.h" />
     <ClInclude Include="netpage.h" />
     <ClInclude Include="pxl.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="sfx.h" />
     <ClInclude Include="types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="dRally.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -455,8 +455,8 @@ void race_main(__DWORD__ A1, __DWORD__ A2){		// my_position_index, number_of_rac
 				F32(esp+0x14) = (float)dRMath_abs((double)s_35e[MY_CAR_IDX].__b0/(double)F32(___1de580h+0x94*MY_CAR_IDX+4));
 				D(___196df8h) = (int)((double)(5*s_35e[MY_CAR_IDX].__19e)*(double)F32(esp+0x14)+(double)(s_35e[MY_CAR_IDX].__19a+0x28000));
 				dRally_Sound_adjustEffect(1, 0x10000, D(___196df8h), 0x8000);
-				race___54668h();	// POSITION, LAP COUNTER
-				race___55ae0h();	// POSITION, LAP COUNTER
+				// TODO FIX race___54668h();	// POSITION, LAP COUNTER
+				// TODO FIX race___55ae0h();	// POSITION, LAP COUNTER
 
 #if defined(DR_MULTIPLAYER)
 				if((___19bd60h == 0)||(D(___243318h) == 0)){

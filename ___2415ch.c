@@ -92,7 +92,7 @@ void ___2415ch(void){
 	__BYTE__ 	esp[0x100];
 
 	const __DWORD__ cars[20] = { 5,5,5,4,4,4,4,3,3,3,2,2,2,2,1,1,1,0,0,0 };
-
+	
 	memcpy(esp, name_list, 0xdc);
 	memset(esp+0xdc, 0, 0x14);
 

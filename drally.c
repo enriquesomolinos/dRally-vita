@@ -38,7 +38,7 @@ int main(int argc, char * argv[]){
 	___2432c8h = &___100dch;
 	dRally_Keyboard_init();
 	___3e720h();
-
+	
 #if defined(DR_MULTIPLAYER)
 	if(___19bd60h != 0) ___623d4h();
 #endif

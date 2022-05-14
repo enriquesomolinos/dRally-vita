@@ -11,11 +11,16 @@ void ___3d908h(void){
     char     buffer[0x64];
 
     strcat(strcpy(buffer, ___1a0d60h), "sanim.haf");
-
+#ifdef PSVITA
+    ___10b80h_cdecl("CINEM/sanim.haf", 1, "tr0-mus.cmf", 2, "sanim-e.cmf", 1, 0x78);
+    dRally_Sound_release();
+#endif
+#ifndef PSVITA
     if(GET_FILE_SIZE(buffer)){
 
         ___10b80h_cdecl("sanim.haf", 1, "tr0-mus.cmf", 2, "sanim-e.cmf", 1, 0x78);
-        
+
         dRally_Sound_release();
     }
+#endif
 }

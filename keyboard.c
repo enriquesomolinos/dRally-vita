@@ -1,6 +1,19 @@
 #include "drally.h"
 #include "drally_keyboard.h"
 
+#define VITA_BTN_TRIANGLE 0
+#define VITA_BTN_CIRCLE 1
+#define VITA_BTN_CROSS 2
+#define VITA_BTN_SQUARE 3
+#define VITA_BTN_LTRIGGER 4
+#define VITA_BTN_RTRIGGER 5
+#define VITA_BTN_DOWN 6
+#define VITA_BTN_LEFT 7
+#define VITA_BTN_UP 8
+#define VITA_BTN_RIGHT 9
+#define VITA_BTN_SELECT 10
+#define VITA_BTN_START 11
+
 extern void_cb ___2432c8h;
 
 __BYTE__ LAST_KEY;
@@ -153,6 +166,22 @@ void dRally_Keyboard_init(void){
     dR_Scancodes[SDL_SCANCODE_PAGEDOWN]       = DR_SCAN_PAGEDOWN;
     dR_Scancodes[SDL_SCANCODE_INSERT]         = DR_SCAN_INSERT;
     dR_Scancodes[SDL_SCANCODE_DELETE]         = DR_SCAN_DELETE;
+
+    dR_Scancodes[VITA_BTN_TRIANGLE] = DR_SCAN_SPACE; //horn
+    dR_Scancodes[VITA_BTN_CIRCLE] = DR_SCAN_DELETE;
+    dR_Scancodes[VITA_BTN_CROSS] = DR_SCAN_KP_ENTER; //accept
+    dR_Scancodes[VITA_BTN_SQUARE] = DR_SCAN_LALT; //mines
+    dR_Scancodes[VITA_BTN_LTRIGGER] = DR_SCAN_LCTRL; //shot
+    dR_Scancodes[VITA_BTN_RTRIGGER] = DR_SCAN_LSHIFT; //turbo
+   
+    dR_Scancodes[VITA_BTN_START] = DR_SCAN_DELETE;
+
+    dR_Scancodes[VITA_BTN_SELECT] = DR_SCAN_ESCAPE;
+    dR_Scancodes[VITA_BTN_DOWN] = DR_SCAN_DOWN;
+    dR_Scancodes[VITA_BTN_LEFT] = DR_SCAN_LEFT;
+    dR_Scancodes[VITA_BTN_UP] = DR_SCAN_UP;
+    dR_Scancodes[VITA_BTN_RIGHT] = DR_SCAN_RIGHT;
+
 }
 
 void dRally_Keyboard_make(SDL_Scancode code){

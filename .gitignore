@@ -15,3 +15,16 @@ z_regex*
 *_ok.c
 *.zip
 *_32b.c
+*.elf
+*.self
+*.velf
+*.vpk
+*.INI
+*.CFG
+*.SG*
+*.bin
+*.BPA
+*.sfo
+/CINEM
+/dRally.aps
+/vita-parse-core-master

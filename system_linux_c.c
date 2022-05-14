@@ -111,7 +111,7 @@ void _dos_gettime(struct dostime_t * __time){
 }
 
 unsigned int __GET_TIMER_TICKS(void){
-#if defined(_WIN32)
+#if defined(_WIN32) ||defined(PSVITA)
     return SDL_GetTicks();
 #else
 	time_t 		tmt;
@@ -127,13 +127,16 @@ unsigned int __GET_TIMER_TICKS(void){
 void dRally_System_init(void){
 
     time_t 		tmt;
-
-	if(SDL_Init(SDL_INIT_VIDEO)){
+    SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
+    SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE |SDL_INIT_GAMECONTROLLER))
+    {
 		
 		SDL_Log("Failed to init video subsystem: %s", SDL_GetError());
 	}
+    SDL_JoystickOpen(0);
 
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(PSVITA)
     time(&tmt);
     localtime_r(&tmt, &TimeInit);
 #endif

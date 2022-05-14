@@ -119,7 +119,7 @@ void menu___3da48h(void){
 			if(D(esp+0x6c) == 1){
 
 				dRally_Sound_release();
-				___10b80h_cdecl("sanim.haf", 1, "tr0-mus.cmf", 2, "sanim-e.cmf", 1, 0x78);
+				___10b80h_cdecl("CINEM/sanim.haf", 1, "tr0-mus.cmf", 2, "sanim-e.cmf", 1, 0x78);
 				dRally_Sound_release();
 				dRally_Sound_load(1, "MEN-MUS.CMF", 2, "MEN-SAM.CMF", 5);
 				dRally_Sound_setMusicVolume(___24cc58h_msx_volume);

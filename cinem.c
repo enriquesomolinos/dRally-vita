@@ -212,7 +212,12 @@ void ___10b80h_cdecl(
 	int 	total_length;
 
 
+#ifdef PSVITA
+	strcat(strcpy(buffer, ""), a_haf_file);
+#endif // PSVITA
+#ifndef PSVITA
 	strcat(strcpy(buffer, ___1a0d60h), a_haf_file);
+#endif // !PSVITA
 	DecodedFrame = ___3f71ch__allocateMemory(0xfa00);	// 320x200
 	EncodedFrame = ___3f71ch__allocateMemory(0xfa00);	// 320x200
 
@@ -235,7 +240,7 @@ void ___10b80h_cdecl(
 	___1a1f1ch = ___3f71ch__allocateMemory(___1a1f00h);
 	fread(___1a1f10h, ___1a1f00h, 1, fd);
 	fread(___1a1f1ch, ___1a1f00h, 1, fd);
-
+	
 
 	// TOTAL LENGTH
 	total_length = 0;
@@ -243,14 +248,14 @@ void ___10b80h_cdecl(
 	while(++n < ___1a1f00h) total_length += ___1a1f1ch[n];
 	printf("[dRally.CINEM] HAF: %s\n", a_haf_file);
 	printf("[dRally.CINEM] Frames: %d, Length: %d [%.2fs]\n", ___1a1f00h, total_length, (double)total_length/70.0/*71.4285714286*/);
-
+	
 
 	DISPLAY_CLEAR_PALETTE();
 	old_bpa_read("MENU.BPA", EncodedFrame, "FRAMES.BPK");
 	bpk_decode4(0x300, 0, (__POINTER__)&pal, EncodedFrame);
 	bpk_decode4(0xfa00, 0x300, VGA13_ACTIVESCREEN, EncodedFrame);
 	__VGA13_PRESENTSCREEN__();
-
+	
 	n = -1;
 	while(++n < 0x10) __DISPLAY_SET_PALETTE_COLOR(pal[n].b, pal[n].g, pal[n].r, n);
 
@@ -260,7 +265,7 @@ void ___10b80h_cdecl(
 	ch_n = 0;
 	___185a0ch = -1;
 	while((++___185a0ch < ___1a1f00h)&&!(skipped = (a_skip&&___5994ch()))){
-
+		
 		esi = __GET_FRAME_COUNTER();
 		eax = 0;
 		fread(&eax, 2, 1, fd);

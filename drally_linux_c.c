@@ -1,6 +1,15 @@
 #include "drally.h"
 #include "drally_display.h"
 
+#ifdef PSVITA
+	#define W_WIDTH 	320//1024//800//1024//640
+	#define W_HEIGHT 	200//768//600//768//480
+#endif // PSVITA
+#ifndef PSVITA
+#define W_WIDTH 	1024//800//1024//640
+#define W_HEIGHT 	768//600//768//480
+#endif 
+
 
 #pragma pack(1)
 typedef struct textbit {
@@ -12,8 +21,7 @@ typedef struct textbit {
 unsigned int INT8_FRAME_COUNTER = 0;
 extern unsigned int ___60458h;
 extern textbit * B800;
-extern unsigned char * VGA13_ACTIVESCREEN;
-extern unsigned char VGA13_ACTIVESCREEN_2[];
+extern unsigned char VGA13_ACTIVESCREEN[];
 extern unsigned char VESA101_ACTIVESCREEN[];
 
 unsigned int Ticks = 0;
@@ -138,7 +146,7 @@ void __PRESENTSCREEN__(void){
 		SDL_RenderPresent(GX.Renderer);
 		SDL_DestroyTexture(GX.Texture);
 		GX.Texture = NULL;
-	}
+	}	
 }
 
 void __VGA13_PRESENTSCREEN__(void){
@@ -196,22 +204,27 @@ void dRally_Display_init(int mode){
 
 	if(!GX.VESA101.Surface) GX.VESA101.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VESA101_ACTIVESCREEN, 640, 480, 8, 640, SDL_PIXELFORMAT_INDEX8);
 
+	int flags = SDL_WINDOW_HIDDEN;
+#ifdef PSVITA 
+	flags = flags || SDL_WINDOW_MAXIMIZED;
+#endif
 	if(!GX.Window){
 
 		GX.Window = SDL_CreateWindow(
-			"dRally / Open Source Engine / Death Rally [1996]",	// window title
-			SDL_WINDOWPOS_CENTERED,      						// initial x position
-			SDL_WINDOWPOS_CENTERED,       						// initial y position
-			W_WIDTH,                  							// width, in pixels
-			W_HEIGHT,											// height, in pixels
-			SDL_WINDOW_HIDDEN									// flags - see below
+			"dRally / Open Source Engine / Death Rally [1996]",                  		// window title
+			SDL_WINDOWPOS_CENTERED,      	// initial x position
+			SDL_WINDOWPOS_CENTERED,       	// initial y position
+			W_WIDTH,                  			// width, in pixels
+			W_HEIGHT,							// height, in pixels
+			flags				// flags - see below
 		);
 	}
 
 	if(!GX.Renderer){
 
-		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 		GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_ACCELERATED);
+		
 		//GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_SOFTWARE);
 	}
 }

@@ -6,12 +6,12 @@
 	extern __BYTE__ ___1e6ed0h[];
 	extern __POINTER__ TRX_VAI;
 	extern int TRX_WIDTH_QTR;
-	extern __BYTE__ ___243cech[];
-	extern __BYTE__ ___196dd4h[];
+	extern int CIRCUIT_VAI_ZONES;
+	extern int IS_RACE_FINISHED;
 	extern __BYTE__ ___1de580h[];
 	extern int MY_CAR_IDX;
 	extern int NUM_OF_LAPS;
-	extern __BYTE__ ___196df0h[];
+	extern int IS_LAP_RECORD;
 	extern int LAP_PREVIOUS_MIN;
 	extern int LAP_PREVIOUS_SEC;
 	extern int LAP_BEST_MIN;
@@ -24,9 +24,9 @@
 	extern char ___19bd64h[16];
 	extern __BYTE__ ___243ca0h[];
 	extern __BYTE__ ___243cb8h[];
-	extern __BYTE__ ___243cdch[];
+	extern int TICKS_TO_MANTAIN_LAP_TIME_IN_HUD;
 	extern __BYTE__ ___1de7d0h[];
-	extern __BYTE__ ___196ab0h[];
+	extern int PLAYER_LAPPED;
 #if defined(DR_MULTIPLAYER)
 	extern __DWORD__ ___19bd60h;
 #endif // DR_MULTIPLAYER
@@ -67,9 +67,9 @@ void race___55ae0h(void){
 
         D(esp+0x4) = B(TRX_VAI+TRX_WIDTH_QTR*((int)s_35e[n].YLocation>>0x2)+((int)s_35e[n].XLocation>>0x2));
 
-        if(D(esp+0x4) == D(___243cech)){
+        if(D(esp+0x4) == CIRCUIT_VAI_ZONES){
             
-            if((int)D(___243cech) > (int)s_35e[n].__0) s_35e[n].__0 = 0;
+            if((int)CIRCUIT_VAI_ZONES > (int)s_35e[n].__0) s_35e[n].__0 = 0;
         }
     }
 
@@ -103,9 +103,9 @@ void race___55ae0h(void){
     n = -1;
     while(++n < NUM_OF_CARS){
 
-        if(s_35e[n].__0 == D(___243cech)){
+        if(s_35e[n].__0 == CIRCUIT_VAI_ZONES){
 
-            if(D(___196dd4h) != 0){
+            if(IS_RACE_FINISHED){
             
                 s_35e[n].Finished = 1;
                 s_94[n].__4 = 0.0f;
@@ -119,7 +119,7 @@ void race___55ae0h(void){
                     if(s_35e[n].Lap == NUM_OF_LAPS){
                     
                         dRally_Sound_pushEffect(2, SFX_FINAL_LAP, 0, 0x10000, 0x50000, 0x8000);
-                        D(___196df0h) = 210;
+                        IS_LAP_RECORD = 210;
                     }
 
                     LapPrevious = 6000*LAP_PREVIOUS_MIN+100*LAP_PREVIOUS_SEC+LAP_PREVIOUS_100;
@@ -135,7 +135,7 @@ void race___55ae0h(void){
 
                     if((LapPrevious < LapRecord)||(LapRecord == 0)){
 
-                        if((___19bd64h[2] != 0x30)&&(D(___196df0h) == 0)) dRally_Sound_pushEffect(2, SFX_LAP_RECORD, 0, 0x10000, 0x50000, 0x8000);
+                        if((___19bd64h[2] != 0x30)&&(IS_LAP_RECORD == 0)) dRally_Sound_pushEffect(2, SFX_LAP_RECORD, 0, 0x10000, 0x50000, 0x8000);
 
                         LAP_RECORD_MIN = LAP_PREVIOUS_MIN;
                         LAP_RECORD_SEC = LAP_PREVIOUS_SEC;
@@ -143,11 +143,11 @@ void race___55ae0h(void){
                     }
                     else {
 
-                        D(___196df0h) = 0;
+                        IS_LAP_RECORD = 0;
                     }
 
                     D(___243cb8h) = D(___243ca0h);
-                    D(___243cdch) = 210;
+                    TICKS_TO_MANTAIN_LAP_TIME_IN_HUD = 210;
                     LAP_PREVIOUS_100 = 0;
                     LAP_PREVIOUS_SEC = 0;
                     LAP_PREVIOUS_MIN = 0;
@@ -164,11 +164,11 @@ void race___55ae0h(void){
                 if(n == MY_CAR_IDX){
                 
                     s_35e[n].Drug = 0;
-                    D(___243cdch) = 9999;
+                    TICKS_TO_MANTAIN_LAP_TIME_IN_HUD = 9999;
                 }
 
                 s_94[n].__4 = 0.0f;
-                D(___196dd4h) = 1;
+                IS_RACE_FINISHED = 1;
 
                 if(!strcmp(s_54[n].__0, "DUKE NUKEM")&&(s_35e[n].Position == 1)) dRally_Sound_pushEffect(2, SFX_HAIL_TO_THE_KING, 0, 0x10000, 0x50000, 0x8000);
             }
@@ -185,19 +185,19 @@ void race___55ae0h(void){
             n = -1;
             while(++n < NUM_OF_CARS){
 
-                edx = s_35e[n].__0+D(___243cech)*s_35e[n].Lap;
+                edx = s_35e[n].__0+ CIRCUIT_VAI_ZONES *s_35e[n].Lap;
                 if(((int)edx > (int)ebp)&&(n != MY_CAR_IDX)) ebp = edx;
             }
 
-            eax = s_35e[MY_CAR_IDX].__0+D(___243cech)*(s_35e[MY_CAR_IDX].Lap+1);
+            eax = s_35e[MY_CAR_IDX].__0+ CIRCUIT_VAI_ZONES *(s_35e[MY_CAR_IDX].Lap+1);
 
-            if(((int)ebp > (int)eax)&&(D(___196ab0h) == 0)){
+            if(((int)ebp > (int)eax)&&(PLAYER_LAPPED == 0)){
 
-                D(___196ab0h) = 1;
+                PLAYER_LAPPED = 1;
                 dRally_Sound_pushEffect(2, SFX_YOUVE_BEEN_LAPPED, 0, 0x10000, 0x50000, 0x8000);
             }
 
-            if(((int)ebp < (int)eax)&&(D(___196ab0h) == 1)) D(___196ab0h) = 0;
+            if(((int)ebp < (int)eax)&&(PLAYER_LAPPED == 1)) PLAYER_LAPPED = 0;
         }
 #if defined(DR_MULTIPLAYER)
     }

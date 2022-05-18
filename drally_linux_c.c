@@ -1,16 +1,6 @@
 #include "drally.h"
 #include "drally_display.h"
 
-#ifdef PSVITA
-	#define W_WIDTH 	320//1024//800//1024//640
-	#define W_HEIGHT 	200//768//600//768//480
-#endif // PSVITA
-#ifndef PSVITA
-#define W_WIDTH 	1024//800//1024//640
-#define W_HEIGHT 	768//600//768//480
-#endif 
-
-
 #pragma pack(1)
 typedef struct textbit {
 	unsigned char 	ascii;
@@ -21,7 +11,8 @@ typedef struct textbit {
 unsigned int INT8_FRAME_COUNTER = 0;
 extern unsigned int ___60458h;
 extern textbit * B800;
-extern unsigned char VGA13_ACTIVESCREEN[];
+extern unsigned char* VGA13_ACTIVESCREEN;
+extern unsigned char VGA13_ACTIVESCREEN_2[];
 extern unsigned char VESA101_ACTIVESCREEN[];
 
 unsigned int Ticks = 0;

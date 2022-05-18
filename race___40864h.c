@@ -7,7 +7,7 @@
 	extern __BYTE__ MY_CAR_IDX[];
 	extern __BYTE__ ___1de580h[];
 	extern __POINTER__ SIDEBOM1_BPK;
-	extern __BYTE__ ___243cdch[];
+	extern int TICKS_TO_MANTAIN_LAP_TIME_IN_HUD;
 	extern __BYTE__ ___243cb8h[];
 	extern __BYTE__ ___1d7810h[];
 	extern __BYTE__ ___243334h[];
@@ -99,7 +99,7 @@ void race___40864h(void){
 
 	if(D(___1de580h+0x94*D(MY_CAR_IDX)+0x2c) == 0){
 
-		if((int)D(___243cdch) <= 0){
+		if(TICKS_TO_MANTAIN_LAP_TIME_IN_HUD <= 0){
 
 			eax = D(___243ca0h);
 			edx = (int)eax>>0x1f;
@@ -136,8 +136,8 @@ void race___40864h(void){
 			edx = (int)eax>>0x1f;
 			___idiv32((__POINTER__)&eax, (__POINTER__)&edx, 0x46);
 			___4256ch_cdecl(___1d7810h, 0x6, 0x6, (int)(1.42*(double)(int)edx), 0x10, 0x2097, 6, 0);
-			D(___243cdch) -= D(___243334h);
-			if((int)D(___243cdch) < 0) D(___243cdch) = 0;
+			TICKS_TO_MANTAIN_LAP_TIME_IN_HUD -= D(___243334h);
+			if(TICKS_TO_MANTAIN_LAP_TIME_IN_HUD < 0) TICKS_TO_MANTAIN_LAP_TIME_IN_HUD = 0;
 		}
 	}
 	else {

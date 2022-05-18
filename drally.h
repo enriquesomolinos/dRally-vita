@@ -188,4 +188,10 @@ void switch_b(__POINTER__, __POINTER__);
 #define ___1a1134h          NUM_OF_LAPS
 #define ___185a54h          MP_MONEY
 
+#define ___196dd4h          IS_RACE_FINISHED
+#define ___196df0h          IS_LAP_RECORD
+#define ___243cdch          TICKS_TO_MANTAIN_LAP_TIME_IN_HUD
+#define ___243cech          CIRCUIT_VAI_ZONES
+#define ___196ab0h          PLAYER_LAPPED
+
 #endif // __DRALLY_H

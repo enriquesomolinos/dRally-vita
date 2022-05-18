@@ -127,6 +127,9 @@ unsigned int __GET_TIMER_TICKS(void){
 void dRally_System_init(void){
 
     time_t 		tmt;
+#ifdef PSVITA
+    scePowerSetArmClockFrequency(444);
+#endif // PSVITA
     SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
     SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE |SDL_INIT_GAMECONTROLLER))

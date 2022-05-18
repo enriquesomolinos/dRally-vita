@@ -3,7 +3,7 @@
 	extern __POINTER__ RACE_OBSTACLE_BPK;
 	extern __BYTE__ ___196dd0h[];
 	extern __BYTE__ ___243334h[];
-	extern __BYTE__ ___196dd4h[];
+	extern int IS_RACE_FINISHED;
 	extern __BYTE__ ___1f2488h[];
 	extern __BYTE__ MY_CAR_IDX[];
 	extern __BYTE__ ___1de580h[];
@@ -60,7 +60,7 @@ void race___5209ch(void){
 
 	if(ecx == 0){
 
-		if(D(___196dd4h) == 0){
+		if(IS_RACE_FINISHED){
 			
 			D(esp+0x18) = ecx;
 			eax ^= eax;

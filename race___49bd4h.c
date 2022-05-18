@@ -46,7 +46,7 @@ typedef struct spectator_s {
 	extern __BYTE__ ___1a54d0h[];
 	extern int TRX_WIDTH;
 	extern int TRX_HEIGHT;
-	extern __BYTE__ ___243cech[];
+	extern int CIRCUIT_VAI_ZONES;
 	extern __BYTE__ ___1e6ed0h[];
 	extern __BYTE__ ___1f2488h[];
 #define SPECTATORS ___1df720h
@@ -69,7 +69,7 @@ void race___49bd4h(void){
 
 	TRX_WIDTH = TrxInf->w;
 	TRX_HEIGHT = TrxInf->h;
-	D(___243cech) = TrxInf->unk0;
+	CIRCUIT_VAI_ZONES = TrxInf->unk0;
 
 	n = -1;
 	while(++n < 4){

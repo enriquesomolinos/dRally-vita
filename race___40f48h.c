@@ -35,7 +35,7 @@
 	extern __BYTE__ ___243338h[];
 	extern __BYTE__ ___2435c4h[];
 	extern __POINTER__ SIDEBOM1_BPK;
-	extern __BYTE__ ___243cdch[];
+	extern int TICKS_TO_MANTAIN_LAP_TIME_IN_HUD;
 	extern __BYTE__ ___243cb8h[];
 	extern __BYTE__ ___1d7810h[];
 	extern __BYTE__ ___1de530h[];
@@ -383,7 +383,7 @@ void race___40f48h(void){
     if((int)D(___1de580h+0x94*D(MY_CAR_IDX)+0x2c) == 0){
 
 // NO WEAPONS - TIME
-        if((int)D(___243cdch) <= 0){
+        if(TICKS_TO_MANTAIN_LAP_TIME_IN_HUD <= 0){
 
             helper00(D(___243ca0h));
         }
@@ -391,8 +391,8 @@ void race___40f48h(void){
                 
             helper00(D(___243cb8h));
 
-            D(___243cdch) -= D(___243334h);
-            if((int)D(___243cdch) < 0) D(___243cdch) = 0;
+            TICKS_TO_MANTAIN_LAP_TIME_IN_HUD -= D(___243334h);
+            if(TICKS_TO_MANTAIN_LAP_TIME_IN_HUD < 0) TICKS_TO_MANTAIN_LAP_TIME_IN_HUD = 0;
         }
     }
     else {

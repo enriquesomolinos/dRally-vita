@@ -103,7 +103,7 @@ __DWORD__ ___196aa0h = 0;
 __DWORD__ ___196aa4h = 0;
 __DWORD__ ___196aa8h = 0;
 __DWORD__ ___196aach = 0;
-__DWORD__ ___196ab0h = 0;
+int PLAYER_LAPPED = 0;
 __DWORD__ ___196ab4h = 0;
 __DWORD__ ___196ab8h = 0;
 
@@ -143,14 +143,14 @@ __DWORD__ ___196dc4h = 0;
 int TRX_VIEWPORT_TL_X = 0;
 int TRX_VIEWPORT_TL_Y = 0;
 __DWORD__ ___196dd0h = 0;
-__DWORD__ ___196dd4h = 0;
+int IS_RACE_FINISHED = 0;
 __DWORD__ ___196dd8h = 0;
-__DWORD__ ___196ddch = 0;
+int ___196ddch = 0;
 __DWORD__ ___196de0h = 0;
 __DWORD__ ___196de4h = 0;
 __DWORD__ ___196de8h = 0;
 __DWORD__ ___196dech = 0;
-__DWORD__ ___196df0h = 0;
+int IS_LAP_RECORD = 0;
 __DWORD__ ___196df4h = 0;
 __DWORD__ ___196df8h = 0x28000;
 

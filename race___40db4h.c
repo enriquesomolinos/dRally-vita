@@ -14,7 +14,7 @@
 	extern int LAP_PREVIOUS_SEC;
 	extern __BYTE__ ___1a1090h[];
 	extern int LAP_PREVIOUS_100;
-	extern __BYTE__ ___243cdch[];
+	extern int TICKS_TO_MANTAIN_LAP_TIME_IN_HUD;
 
 void race___40864h(void);
 
@@ -110,16 +110,16 @@ void race___40db4h(void){
 		D(___243ca0h) = edi;
 ___40ef4h:
 		edi = D(___243ca0h);
-		eax = D(___243cdch);
+		eax = TICKS_TO_MANTAIN_LAP_TIME_IN_HUD;
 		esi = D(___243cd4h);
 		if((int)eax <= 0) goto ___40f28h;
-		edx = D(___243cdch);
+		edx = TICKS_TO_MANTAIN_LAP_TIME_IN_HUD;
 		eax = D(___243334h);
 		edx -= eax;
-		D(___243cdch) = edx;
+		TICKS_TO_MANTAIN_LAP_TIME_IN_HUD = edx;
 		if((int)edx >= 0) goto ___40f28h;
 		ecx = 0;
-		D(___243cdch) = ecx;
+		TICKS_TO_MANTAIN_LAP_TIME_IN_HUD = ecx;
 ___40f28h:
 		D(___243cd4h) = esi;
 		D(___243ca0h) = edi;

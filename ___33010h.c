@@ -53,7 +53,7 @@
 	extern __BYTE__ ___1a1090h[];
 	extern __BYTE__ ___1a10a8h[];
 	extern __BYTE__ ___1a10a0h[];
-	extern __BYTE__ ___196ab0h[];
+	extern int PLAYER_LAPPED;
 	extern int LAP_BEST_100;
 	extern __BYTE__ ___196aa4h[];
 	extern __BYTE__ ___1a1ef8h[];
@@ -552,7 +552,7 @@ void ___33010h_cdecl(int NumCars){
 	D(___1a1090h) = 0;
 	D(___1a10a8h) = 0;
 	D(___1a10a0h) = 0;
-	D(___196ab0h) = 0;
+	PLAYER_LAPPED = 0;
 	LAP_BEST_100 = 0;
 
 	edx = 0;
@@ -871,7 +871,7 @@ void ___33010h_cdecl(int NumCars){
 #if defined(DR_MULTIPLAYER)
 	if(___19bd60h == 0){
 #endif // DR_MULTIPLAYER
-		if(((int)ebx >= (int)s_6c[D(___1a1ef8h)].points)&&(D(___196ab0h) == 0)){
+		if(((int)ebx >= (int)s_6c[D(___1a1ef8h)].points)&&(PLAYER_LAPPED == 0)){
 
 			n = -1;
 			while(++n < 4){

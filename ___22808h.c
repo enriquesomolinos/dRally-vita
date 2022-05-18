@@ -53,7 +53,6 @@ void ___22808h(void){
 	___10b80h_cdecl("CINEM/endani.haf", 1, "tr0-mus.cmf", 2, "endani-e.cmf", 1, 0x78);
 #endif // PSVITA
 #ifndef PSVITA
-#ifndef PSVITA
 	s_6c = (racer_t *)___1a01e0h;
 	strcat(strcpy(esp, ___1a0d60h), "endani.haf");
 	if(GET_FILE_SIZE(esp) != 0) ___10b80h_cdecl("endani.haf", 1, "tr0-mus.cmf", 2, "endani-e.cmf", 1, 0x78);

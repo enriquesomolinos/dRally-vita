@@ -20,7 +20,7 @@ typedef struct x655_s {
 	extern __POINTER__ ___1a1108h;
 	extern __BYTE__ ___1a01e0h[];
 	extern __BYTE__ ___1a1ef8h[];
-	extern __BYTE__ ___196ab0h[];
+	extern int PLAYER_LAPPED;
 	extern __POINTER__ ___1a0ff0h;
 	extern __POINTER__ ___1a10b8h;
 	extern __BYTE__ ___185c7ah[];
@@ -165,7 +165,7 @@ void ___36358h_cdecl(__DWORD__ A1){
 
 			if(s_6c[edx/0x6c].damage != 0x64){
 				
-				if((eax == D(___1a1ef8h))&&(D(___196ab0h) == 1)) break;
+				if((eax == D(___1a1ef8h))&&(PLAYER_LAPPED == 1)) break;
 
 				edx = D(esp+0x4);
 				eax ^= eax;
@@ -209,7 +209,7 @@ void ___36358h_cdecl(__DWORD__ A1){
 
 			if(s_6c[edx/0x6c].damage != 0x64){
 				
-				if((eax != D(___1a1ef8h))||(D(___196ab0h) != 1)){
+				if((eax != D(___1a1ef8h))||(PLAYER_LAPPED != 1)){
 
 					eax = D(esp+0x4);
 					edx ^= edx;
@@ -232,7 +232,7 @@ void ___36358h_cdecl(__DWORD__ A1){
 
 			if(s_6c[edx/0x6c].damage != 0x64){
 
-				if((eax != D(___1a1ef8h))||(D(___196ab0h) != 1)){
+				if((eax != D(___1a1ef8h))||(PLAYER_LAPPED != 1)){
 					
 					eax = D(esp+0x4);
 					edx ^= edx;
@@ -255,7 +255,7 @@ void ___36358h_cdecl(__DWORD__ A1){
 
 			if(s_6c[edx/0x6c].damage != 0x64){
 
-				if((eax != D(___1a1ef8h))||(D(___196ab0h) != 1)){
+				if((eax != D(___1a1ef8h))||(PLAYER_LAPPED != 1)){
 					
 					eax = D(esp+0x4);
 					edx ^= edx;

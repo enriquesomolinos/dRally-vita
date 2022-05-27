@@ -1,0 +1,30 @@
+name: Makefile VITA
+
+on:
+  push:
+    branches: [ psvita ]
+  pull_request:
+    branches: [ psvita ]
+
+jobs:
+  build:
+
+    runs-on: gnuton/vitasdk-docker
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Create Build Environment
+      run: >
+        export VITASDK=/usr/local/vitasdk &&
+        export PATH=$VITASDK/bin:$PATH
+        sudo apt-get update -y &&
+        sudo apt-get install -y libsdl1.2-dev libsdl2-dev &&
+        sudo ./usr/local/vitasdk/bin/vitasdk-update &&
+
+      
+    - name: Build
+      working-directory: ${{github.workspace}}
+      shell: bash
+      run: make -f Makefile.vita  vita
+

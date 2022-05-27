@@ -14,18 +14,24 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Create Build Environment
+    - name: Register env variables
       run: >
         export VITASDK=/usr/local/vitasdk &&
-        export PATH=$VITASDK/bin:$PATH &&
+        export PATH=$VITASDK/bin:$PATH
+        
+        
+    - name: Download vitasdk
+      run: >
         git clone https://github.com/vitasdk/vdpm &&
         cd vdpm &&
         ./bootstrap-vitasdk.sh &&
         ./install-all.sh &&
+        sudo ./usr/local/vitasdk/bin/vitasdk-update
+        
+    - name: Install dependencies
+      run: >
         sudo apt-get update -y &&
-        sudo apt-get install -y libsdl1.2-dev libsdl2-dev &&
-        sudo ./usr/local/vitasdk/bin/vitasdk-update &&
-
+        sudo apt-get install -y libsdl1.2-dev libsdl2-dev
       
     - name: Build
       working-directory: ${{github.workspace}}

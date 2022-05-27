@@ -31,5 +31,8 @@ jobs:
     - name: Build
       working-directory: ${{github.workspace}}
       shell: bash
-      run: make -f Makefile.vita  vita
+      run: >
+        export VITASDK=/usr/local/vitasdk &&
+        export PATH=$VITASDK/bin:$PATH &&
+        make -f Makefile.vita  vita
 

@@ -9,6 +9,16 @@ services:
     tty: true
     volumes:
       - .:/dreerally:cached 
- 
-   
-   
+
+  switch-builder: # New Nintendo Switch service
+    build:
+      context: ./docker
+      dockerfile: DockerfileSwitch # Use the new Dockerfile
+    container_name: dreerally-switch-builder # Unique container name
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/dreerally:cached # Mount the project directory
+    # Optionally, define a default command or working directory if different from Dockerfile
+    # working_dir: /dreerally
+    # command: make -f Makefile.switch

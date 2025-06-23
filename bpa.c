@@ -154,15 +154,15 @@ BPA * bpa_open(const char * bpa_fname){
 
     strcpy(bpa->file, bpa_fname);
     bpa->entry = 0;
-#ifdef PSVITA
+#if defined(PSVITA) || defined(SWITCH)
     char filename[256];
     strcpy(filename, "ux0:data/DERA00002/DATA/");
     if ((bpa->fd = fopen(strcat(filename, bpa_fname), "rb")) != (FILE*)0) {
 
-#endif // PSVITA
-#ifndef PSVITA
+#endif // defined(PSVITA) || defined(SWITCH)
+#if !defined(PSVITA) && !defined(SWITCH)
         if((bpa->fd = fopen(bpa_fname, "rb")) != (FILE*)0){
-#endif // !PSVITA
+#endif // !defined(PSVITA) && !defined(SWITCH)
         fread(&bpa->header, 1, sizeof(bpa_header_t), bpa->fd);
     }
     

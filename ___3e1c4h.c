@@ -30,22 +30,22 @@ static file_t assets[14] = {
     { "TR8.BPA",     0x3dd12 },
     { "TR9.BPA",     0x68623 }
 };
-#ifdef PSVITA
+#if defined(PSVITA) || defined(SWITCH)
 static file_t cinems[3] = {
 
     { "CINEM/SANIM.HAF",   0x1485040 },
     { "CINEM/ENDANI.HAF",  0x39ed6b },
     { "CINEM/ENDANI0.HAF", 0x6dc2fc }
 };
-#endif
-#ifndef PSVITA
+#endif // defined(PSVITA) || defined(SWITCH)
+#if !defined(PSVITA) && !defined(SWITCH)
 static file_t cinems[3] = {
 
     { "SANIM.HAF",   0x1485040 },
     { "ENDANI.HAF",  0x39ed6b },
     { "ENDANI0.HAF", 0x6dc2fc }
 };
-#endif
+#endif // !defined(PSVITA) && !defined(SWITCH)
 
 void ___3e1c4h(void){
 

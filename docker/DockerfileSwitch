@@ -1,0 +1,55 @@
+# Start from a generic base image, like Ubuntu
+FROM ubuntu:20.04
+
+# Avoid interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install prerequisites for devkitPro
+RUN apt-get update && apt-get install -y --no-install-recommends     ca-certificates     sudo     git     wget     build-essential     python3     libsdl2-dev     libsdl2-net-dev     libpng-dev     libjpeg-dev     zlib1g-dev &&     rm -rf /var/lib/apt/lists/*
+
+# Set up devkitPro environment variables
+ENV DEVKITPRO=/opt/devkitpro
+ENV DEVKITA64=${DEVKITPRO}/devkitA64
+ENV PATH=${DEVKITPRO}/tools/bin:${DEVKITA64}/bin:${PATH}
+
+# Create a non-root user for devkitPro installation
+# This user needs sudo rights to run the install-devkitpro-pacman script which calls apt.
+RUN useradd -m -s /bin/bash devkit && \
+    echo "devkit ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Create devkitPro directory as root, then change ownership to the devkit user
+# This ensures the directory exists and is owned by devkit before we switch user.
+RUN mkdir -p ${DEVKITPRO} && \
+    chown -R devkit:devkit ${DEVKITPRO}
+
+# Switch to the non-root user
+USER devkit
+# User's home directory, or could be ${DEVKITPRO}
+WORKDIR /home/devkit
+
+# Download and install devkitPro pacman using the official script
+# The script itself uses sudo internally for apt install, so devkit user needs sudo rights.
+# Running this from /tmp or /home/devkit to avoid permission issues with ${DEVKITPRO} if WORKDIR was set there too early.
+RUN cd /tmp && \
+    wget --no-check-certificate https://apt.devkitpro.org/install-devkitpro-pacman && \
+    chmod +x ./install-devkitpro-pacman && \
+    # Ensure all apt install commands within the script are non-interactive
+    sed -i 's/apt install /apt install -y /g' ./install-devkitpro-pacman && \
+    sed -i 's/apt-get install /apt-get install -y /g' ./install-devkitpro-pacman && \
+    sudo DEBIAN_FRONTEND=noninteractive ./install-devkitpro-pacman && \
+    rm ./install-devkitpro-pacman
+
+# Now, dkp-pacman commands are run by 'devkit' user who owns DEVKITPRO.
+# DEVKITPRO is in PATH (set by ENV earlier).
+# dkp-pacman operates on DEVKITPRO, which devkit user has write permissions for.
+RUN dkp-pacman -Sy --noconfirm
+RUN dkp-pacman -S switch-dev --noconfirm
+RUN dkp-pacman -S switch-sdl2 switch-sdl2_net switch-libpng switch-libjpeg-turbo switch-zlib --noconfirm
+
+# Copy the project files into the container
+# For consistency with previous setup, it might be better to set WORKDIR /dreerally then COPY . .
+WORKDIR /dreerally
+COPY . /dreerally
+
+# Set the default command (e.g., to keep the container running or start a build)
+CMD ["/bin/bash"]

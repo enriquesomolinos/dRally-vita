@@ -126,50 +126,54 @@ void DISPLAY_CLEAR_PALETTE(void){
 }
 
 void dRally_Display_init(int mode){
-    SDL_ShowCursor(SDL_DISABLE);
-    SDL_DisableScreenSaver();
-    
-    if(!GX.VGA13.Surface){
-        switch(mode){
-            case W_SHRINK:
-                GX.WindowMode = W_SHRINK;
-                GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2+20*320, 320, 200, 8, 320, SDL_PIXELFORMAT_INDEX8);
-                break;
-            case W_LETTERBOX:
-                GX.WindowMode = W_LETTERBOX;
-                GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2, 320, 240, 8, 320, SDL_PIXELFORMAT_INDEX8);
-                break;
-            default:
-                printf("[dRally.DISPLAY] Invalid Window Mode [#%d]. Defaults to W_SHRINK [#%d]\n", mode, W_SHRINK);
-                GX.WindowMode = W_SHRINK;
-                GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2+20*320, 320, 200, 8, 320, SDL_PIXELFORMAT_INDEX8);
-                break;
-        }
-    }
-    
-    if(!GX.VESA101.Surface) GX.VESA101.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VESA101_ACTIVESCREEN, 640, 480, 8, 640, SDL_PIXELFORMAT_INDEX8);
-    
-    int flags = SDL_WINDOW_HIDDEN;
-#ifdef PSVITA
-    flags = flags | SDL_WINDOW_MAXIMIZED;
-#endif
 
-    if(!GX.Window){
-        GX.Window = SDL_CreateWindow(
-            "dRally / Open Source Engine / Death Rally",
-            SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
-            960,  /* Ancho absoluto nativo de la pantalla de la Vita */
-            544,  /* Alto absoluto nativo de la pantalla de la Vita */
-            flags
-        );
-    }
-    
-    if(!GX.Renderer){
-        GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_ACCELERATED);
-        /* FIX DEFINITIVO PANTALLA COMPLETA: Fuerza el escalado elástico por hardware de 640x480 a 960x544 */
-        SDL_RenderSetLogicalSize(GX.Renderer, 640, 480);
-    }
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_DisableScreenSaver();
+
+	if(!GX.VGA13.Surface){
+
+		switch(mode){
+		case W_SHRINK:
+			GX.WindowMode = W_SHRINK;
+			GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2+20*320, 320, 200, 8, 320, SDL_PIXELFORMAT_INDEX8);
+			break;
+		case W_LETTERBOX:
+			GX.WindowMode = W_LETTERBOX;
+			GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2, 320, 240, 8, 320, SDL_PIXELFORMAT_INDEX8);
+			break;
+		default:
+			printf("[dRally.DISPLAY] Invalid Window Mode [#%d]. Defaults to W_SHRINK [#%d]\n", mode, W_SHRINK);
+			GX.WindowMode = W_SHRINK;
+			GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2+20*320, 320, 200, 8, 320, SDL_PIXELFORMAT_INDEX8);
+			break;		
+		}	
+	}
+
+	if(!GX.VESA101.Surface) GX.VESA101.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VESA101_ACTIVESCREEN, 640, 480, 8, 640, SDL_PIXELFORMAT_INDEX8);
+
+	int flags = SDL_WINDOW_HIDDEN;
+#if defined(PSVITA) || defined(SWITCH)
+	flags = flags || SDL_WINDOW_MAXIMIZED;
+#endif // defined(PSVITA) || defined(SWITCH)
+	if(!GX.Window){
+
+		GX.Window = SDL_CreateWindow(
+			"dRally / Open Source Engine / Death Rally [1996]",                  		// window title
+			SDL_WINDOWPOS_CENTERED,      	// initial x position
+			SDL_WINDOWPOS_CENTERED,       	// initial y position
+			W_WIDTH,                  			// width, in pixels
+			W_HEIGHT,							// height, in pixels
+			flags				// flags - see below
+		);
+	}
+
+	if(!GX.Renderer){
+
+		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+		GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_ACCELERATED);
+		
+		//GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_SOFTWARE);
+	}
 }
 
 void dRally_Display_clean(void){

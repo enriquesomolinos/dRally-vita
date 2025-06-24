@@ -4,6 +4,9 @@ FROM ubuntu:20.04
 # Avoid interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Create /etc/mtab as a symbolic link to /proc/mounts to prevent issues in some environments
+RUN ln -sf /proc/mounts /etc/mtab
+
 # Install prerequisites for devkitPro
 RUN apt-get update && apt-get install -y --no-install-recommends     ca-certificates     sudo     git     wget     build-essential     python3     libsdl2-dev     libsdl2-net-dev     libpng-dev     libjpeg-dev     zlib1g-dev &&     rm -rf /var/lib/apt/lists/*
 

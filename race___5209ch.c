@@ -60,7 +60,7 @@ void race___5209ch(void){
 
 	if(ecx == 0){
 
-		if(IS_RACE_FINISHED){
+		if(IS_RACE_FINISHED == 0){
 			
 			D(esp+0x18) = ecx;
 			eax ^= eax;

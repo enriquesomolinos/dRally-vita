@@ -45,9 +45,9 @@ RUN cd /tmp && \
 # Now, dkp-pacman commands are run by 'devkit' user who owns DEVKITPRO.
 # DEVKITPRO is in PATH (set by ENV earlier).
 # dkp-pacman operates on DEVKITPRO, which devkit user has write permissions for.
-RUN dkp-pacman -Sy --noconfirm
-RUN dkp-pacman -S switch-dev --noconfirm
-RUN dkp-pacman -S switch-sdl2 switch-sdl2_net switch-libpng switch-libjpeg-turbo switch-zlib --noconfirm
+RUN sudo dkp-pacman -Sy --noconfirm
+RUN sudo dkp-pacman -S switch-dev --noconfirm
+RUN sudo dkp-pacman -S switch-sdl2 switch-sdl2_net switch-libpng switch-libjpeg-turbo switch-zlib --noconfirm
 
 # Copy the project files into the container
 # For consistency with previous setup, it might be better to set WORKDIR /dreerally then COPY . .

@@ -212,12 +212,11 @@ void ___10b80h_cdecl(
 	int 	total_length;
 
 
-#ifdef PSVITA
+#if defined(PSVITA) || defined(SWITCH)
 	strcat(strcpy(buffer, ""), a_haf_file);
-#endif // PSVITA
-#ifndef PSVITA
+#else // !(defined(PSVITA) || defined(SWITCH))
 	strcat(strcpy(buffer, ___1a0d60h), a_haf_file);
-#endif // !PSVITA
+#endif // defined(PSVITA) || defined(SWITCH)
 	DecodedFrame = ___3f71ch__allocateMemory(0xfa00);	// 320x200
 	EncodedFrame = ___3f71ch__allocateMemory(0xfa00);	// 320x200
 
@@ -234,6 +233,11 @@ void ___10b80h_cdecl(
 	}
 
 	fd = strupr_fopen(buffer, "rb");
+	if(!fd){
+
+		printf("[dRally.CINEM] Error reading %s file!\n", buffer);
+		return;
+	}
 	___1a1f00h = 0;
 	fread(&___1a1f00h, 2, 1, fd);
 	___1a1f10h = ___3f71ch__allocateMemory(___1a1f00h);

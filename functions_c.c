@@ -13,7 +13,11 @@ FILE * strupr_fopen(const char * file_name, const char * mode){
 	}
 #if defined(PSVITA) || defined(SWITCH)
 	char folder[256];
-	strcpy(folder, "ux0:data/DERA00002/DATA/"); // This path might need to be different for Switch
+#if defined(PSVITA)
+	strcpy(folder, "ux0:data/DERA00002/DATA/");
+#else // defined(SWITCH)
+	strcpy(folder, "sdmc:/switch/drally/");
+#endif
 
 	return fopen(strcat(folder, strupr_watcom106(strcpy(buffer, file_name))), mode);
 #else // !(defined(PSVITA) || defined(SWITCH))

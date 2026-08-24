@@ -7,6 +7,10 @@ This project is a performance-focused fork and would not be possible without the
 * **Original PS Vita Port:** Developed by **Enrique Somolinos** ([@enriquesomolinos](https://github.com)). Check out the original repository here: [enriquesomolinos/dRally-vita](https://github.com/dRally-vita).
 * **Open Source Engine:** Based on the source code reconstruction by **urxp** ([urxp/dRally](https://github.com)).
 
+If you enjoy this port, consider supporting it on Ko-fi: https://ko-fi.com/enriquesomolinos
+
+# Instalation for PSVITA
+
 ---
 
 ## 💾 Installation & Custom Layout Configuration
@@ -18,6 +22,18 @@ This fork includes a pre-configured `dr.cfg` file with an optimized, modern hand
 3. Overwrite the existing file if prompted.
 
 ---
+
+# Instalation for Nintendo Switch
+
+* Copy the nro file under sdmc:/switch/drally
+* Copy all the original game assets under sdmc:/switch/drally
+* Copy the DR.CFG file under sdmc:/switch/drally
+
+See [doc/switch.md](doc/switch.md) for how to build the nro, Switch-specific control mapping, and other build-time options.
+
+---
+
+# Controls
 
 ## 🎮 Native Control Layout
 Once the custom `dr.cfg` is placed in the data folder, the handheld controls will map as follows:

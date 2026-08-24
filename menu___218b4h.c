@@ -49,9 +49,19 @@ void ___59db8h(void);
 
 static int helper_volume(int val){
 
+	int vol;
+
 	if(val < 0) val += 0x1ff;
 
-	return val>>9;
+	vol = val>>9;
+
+	// vol drives display-buffer offset math in helper_volume2(); a corrupt
+	// (e.g. mismatched-format) DR.CFG must not be able to turn it into an
+	// out-of-bounds pointer.
+	if(vol < 0) vol = 0;
+	if(vol > 128) vol = 128;
+
+	return vol;
 }
 
 static int helper_volume2(const char * label, int vol, void (*vol_cb)(int)){

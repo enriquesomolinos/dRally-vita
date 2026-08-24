@@ -1,6 +1,10 @@
 #include "drally.h"
 #include "drally_display.h"
 
+#if defined(SWITCH)
+#include <unistd.h>
+#endif
+
 #if defined(DR_MULTIPLAYER)
 extern __DWORD__ ___19bd60h;
 void ___623d4h(void);
@@ -29,6 +33,15 @@ static void ___100dch(void){
 }
 
 int main(int argc, char * argv[]){
+
+#if defined(SWITCH)
+	// Offline logging: redirect stdout/stderr to a file on the SD card so
+	// startup failures are visible without connecting to any network.
+	if(freopen("sdmc:/switch/drally/drally_log.txt", "w", stdout) != NULL){
+		setvbuf(stdout, NULL, _IOLBF, 0);
+		dup2(fileno(stdout), STDERR_FILENO);
+	}
+#endif
 
 	dRally_System_init();
 #if defined(DR_LETTERBOX)

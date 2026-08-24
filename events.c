@@ -1,4 +1,5 @@
 #include "drally.h"
+#include "drally_keyboard.h"
 
 extern void_cb ___2432c8h;
 
@@ -47,31 +48,31 @@ void IO_Loop(void){
                 case 0: /* Tu D-Pad continuo y perfecto para las curvas */
                     if (e.jaxis.value > 20000) { // GIRO A LA DERECHA
                         if (!dpad_right_pressed) {
-                            if (dpad_left_pressed) { 
-                                dRally_Keyboard_break(7);
+                            if (dpad_left_pressed) {
+                                dRally_Keyboard_break(JOY_BTN_LEFT);
                                 dpad_left_pressed = 0;
                             }
-                            dRally_Keyboard_make(9); 
+                            dRally_Keyboard_make(JOY_BTN_RIGHT);
                             dpad_right_pressed = 1;
                         }
-                    } 
+                    }
                     else if (e.jaxis.value < -20000) { // GIRO A LA IZQUIERDA
                         if (!dpad_left_pressed) {
-                            if (dpad_right_pressed) { 
-                                dRally_Keyboard_break(9);
+                            if (dpad_right_pressed) {
+                                dRally_Keyboard_break(JOY_BTN_RIGHT);
                                 dpad_right_pressed = 0;
                             }
-                            dRally_Keyboard_make(7); 
+                            dRally_Keyboard_make(JOY_BTN_LEFT);
                             dpad_left_pressed = 1;
                         }
-                    } 
+                    }
                     else { // EL DPAD REGRESA AL CENTRO
                         if (dpad_right_pressed) {
-                            dRally_Keyboard_break(9);
+                            dRally_Keyboard_break(JOY_BTN_RIGHT);
                             dpad_right_pressed = 0;
                         }
                         if (dpad_left_pressed) {
-                            dRally_Keyboard_break(7);
+                            dRally_Keyboard_break(JOY_BTN_LEFT);
                             dpad_left_pressed = 0;
                         }
                     }

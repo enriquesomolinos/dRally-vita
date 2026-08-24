@@ -1,5 +1,7 @@
 #include "drally.h"
+#ifdef PSVITA
 #include <psp2/power.h>
+#endif
 
 
 #pragma pack(1)

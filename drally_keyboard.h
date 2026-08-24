@@ -117,5 +117,52 @@ enum DR_SCAN {
 
 #undef E0
 
+// Raw SDL joystick button indices, and which ones the game reads as a
+// (virtual) D-pad when the left analog stick is used for steering.
+// These indices depend entirely on how each platform's SDL joystick
+// backend orders its buttons, so PSVITA and SWITCH need separate tables.
+#if defined(PSVITA)
+
+    #define JOY_BTN_TRIANGLE    0
+    #define JOY_BTN_CIRCLE      1
+    #define JOY_BTN_CROSS       2
+    #define JOY_BTN_SQUARE      3
+    #define JOY_BTN_LTRIGGER    4
+    #define JOY_BTN_RTRIGGER    5
+    #define JOY_BTN_DOWN        6
+    #define JOY_BTN_LEFT        7
+    #define JOY_BTN_UP          8
+    #define JOY_BTN_RIGHT       9
+    #define JOY_BTN_SELECT      10
+    #define JOY_BTN_START       11
+
+#elif defined(SWITCH)
+
+    // devkitPro SDL2's joystick backend reports buttons in libnx's
+    // HidNpadButton bit order: A,B,X,Y,StickL,StickR,L,R,ZL,ZR,Plus,Minus,
+    // D-pad Left,Up,Right,Down. Verify against sdmc:/switch/drally/drally_log.txt
+    // (each press logs "SDL_JOYBUTTONDOWN <index>") and adjust if it
+    // doesn't match your controller.
+    #define JOY_BTN_A           0
+    #define JOY_BTN_B           1
+    #define JOY_BTN_X           2
+    #define JOY_BTN_Y           3
+    #define JOY_BTN_LTRIGGER    6
+    #define JOY_BTN_RTRIGGER    7
+    #define JOY_BTN_START       10   // Plus
+    #define JOY_BTN_SELECT      11   // Minus
+    #define JOY_BTN_LEFT        12
+    #define JOY_BTN_UP          13
+    #define JOY_BTN_RIGHT       14
+    #define JOY_BTN_DOWN        15
+
+    // Positional equivalents of the PSVITA face buttons (top/right/bottom/left)
+    #define JOY_BTN_TRIANGLE    JOY_BTN_X
+    #define JOY_BTN_CIRCLE      JOY_BTN_A
+    #define JOY_BTN_CROSS       JOY_BTN_B
+    #define JOY_BTN_SQUARE      JOY_BTN_Y
+
+#endif // defined(PSVITA) || defined(SWITCH)
+
 #endif // __DRALLY_KEYBOARD_H
 

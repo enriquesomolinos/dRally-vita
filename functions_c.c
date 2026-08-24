@@ -11,14 +11,19 @@ FILE * strupr_fopen(const char * file_name, const char * mode){
 		printf("[strupr_fopen] File name too long: (%s)\n", file_name);
 		return (FILE *)0;
 	}
-#ifdef PSVITA
+#if defined(PSVITA) || defined(SWITCH)
 	char folder[256];
+#if defined(PSVITA)
 	strcpy(folder, "ux0:data/DERA00002/DATA/");
+#else // defined(SWITCH)
+	strcpy(folder, "sdmc:/switch/drally/");
+#endif
 
 	return fopen(strcat(folder, strupr_watcom106(strcpy(buffer, file_name))), mode);
-#endif // PSVITA
+#else // !(defined(PSVITA) || defined(SWITCH))
 
 	return fopen(strupr_watcom106(strcpy(buffer, file_name)), mode);
+#endif // defined(PSVITA) || defined(SWITCH)
 }
 
 __DWORD__ GET_FILE_SIZE(const char * file_name){

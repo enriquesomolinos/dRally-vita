@@ -16,6 +16,8 @@ z_regex*
 *.zip
 *_32b.c
 *.elf
+*.nro
+*.map
 *.self
 *.velf
 *.vpk
@@ -28,3 +30,4 @@ z_regex*
 /CINEM
 /dRally.aps
 /vita-parse-core-master
+/build

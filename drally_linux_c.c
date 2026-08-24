@@ -25,18 +25,20 @@ void __PRESENTSCREEN__(void);
 __BYTE__ dRally_Keyboard_popLastKey();
 
 static struct GX {
-    int ActiveMode;
-    int WindowMode;
-    struct {
-        SDL_Surface * Surface;
-    } VGA13;
-    struct {
-        SDL_Surface * Surface;
-    } VESA101;
-    SDL_Surface * Surface;
-    SDL_Window * Window;
-    SDL_Renderer * Renderer;
-    SDL_Texture * Texture;
+	int 			ActiveMode;
+	int 			WindowMode;
+	struct {
+		SDL_Surface * Surface;
+	} VGA13;
+	struct {
+		SDL_Surface * Surface;
+	} VESA101;
+	SDL_Surface * 	Surface;
+	SDL_Window * 	Window;
+	SDL_Renderer * 	Renderer;
+	SDL_Texture * 	Texture;
+	int 			TextureW;
+	int 			TextureH;
 } GX = {0};
 
 extern __DWORD__ ___60441h;
@@ -52,19 +54,36 @@ static void IRQ0_TimerISR(void){
     if(___60446h == 1) ___6044ch();
 }
 
+#if defined(SWITCH)
+static Uint32 perf_tick_count = 0;
+static Uint32 perf_tick_skip_sum = 0;
+static Uint32 perf_tick_log_ticks = 0;
+#endif
+
 int skip;
 
 unsigned int __GET_FRAME_COUNTER(void){
     unsigned int NewTicks;
     unsigned int FrameMs = 1000/___60458h;
     NewTicks = SDL_GetTicks()-Ticks;
-    
+
     if(NewTicks >= FrameMs){
         Ticks = SDL_GetTicks();
         skip = NewTicks/FrameMs - 1;
         INT8_FRAME_COUNTER += skip;
         IRQ0_TimerISR();
         if(!skip) __PRESENTSCREEN__();
+
+#if defined(SWITCH)
+        perf_tick_count++;
+        perf_tick_skip_sum += skip;
+        if(SDL_GetTicks()-perf_tick_log_ticks >= 1000){
+            printf("[dRally.PERF] ticks/s=%u skipped_ticks=%u target_hz=%u\n", perf_tick_count, perf_tick_skip_sum, ___60458h);
+            perf_tick_count = 0;
+            perf_tick_skip_sum = 0;
+            perf_tick_log_ticks = SDL_GetTicks();
+        }
+#endif
     }
     IO_Loop();
     return INT8_FRAME_COUNTER;
@@ -93,14 +112,106 @@ void __WAIT_5(void){
 void __VESA101_SETMODE();
 void __DISPLAY_SET_PALETTE_COLOR(int b, int g, int r, int n);
 
+#if defined(SWITCH)
+static Uint32 perf_present_count = 0;
+static Uint32 perf_blit_ms = 0;
+static Uint32 perf_present_ms = 0;
+static Uint32 perf_log_ticks = 0;
+#endif
+
 void __PRESENTSCREEN__(void){
-    if(GX.ActiveMode){
-        GX.Texture = SDL_CreateTextureFromSurface(GX.Renderer, GX.Surface);
-        SDL_RenderCopy(GX.Renderer, GX.Texture, NULL, NULL);
-        SDL_RenderPresent(GX.Renderer);
-        SDL_DestroyTexture(GX.Texture);
-        GX.Texture = NULL;
-    }
+
+	if(GX.ActiveMode){
+
+		SDL_Color * 	palette;
+		__BYTE__ * 		src_row;
+		__DWORD__ * 	dst_row;
+		void * 			pixels;
+		int 			pitch, x, y;
+#if defined(SWITCH)
+		Uint32			t0, t1;
+
+		t0 = SDL_GetTicks();
+#endif
+
+		// SDL_CreateTextureFromSurface() would allocate+convert a brand new
+		// GPU texture every frame and immediately destroy it; that create/
+		// destroy churn is expensive on GLES drivers. Keep one streaming
+		// texture instead, and only recreate it if the source size changes.
+		if(!GX.Texture || GX.TextureW != GX.Surface->w || GX.TextureH != GX.Surface->h){
+
+			if(GX.Texture) SDL_DestroyTexture(GX.Texture);
+			// ABGR8888 (== GL_RGBA/GL_UNSIGNED_BYTE) is natively supported by
+			// every GLES2 driver; ARGB8888 needs GL_EXT_texture_format_BGRA8888,
+			// which isn't guaranteed, and produced a garbled image on Switch.
+			GX.Texture = SDL_CreateTexture(GX.Renderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, GX.Surface->w, GX.Surface->h);
+			GX.TextureW = GX.Surface->w;
+			GX.TextureH = GX.Surface->h;
+		}
+
+		// The source is an 8-bit paletted surface; GLES can't sample that
+		// directly, so expand it into the locked texture buffer ourselves.
+		palette = GX.Surface->format->palette->colors;
+
+		if(GX.Texture && SDL_LockTexture(GX.Texture, NULL, &pixels, &pitch) == 0){
+
+			y = -1;
+			while(++y < GX.Surface->h){
+
+				src_row = (__BYTE__ *)GX.Surface->pixels + y*GX.Surface->pitch;
+				dst_row = (__DWORD__ *)((__BYTE__ *)pixels + y*pitch);
+
+				x = -1;
+				while(++x < GX.Surface->w){
+
+					SDL_Color c = palette[src_row[x]];
+					dst_row[x] = (0xffu<<24)|(c.b<<16)|(c.g<<8)|c.r;
+				}
+			}
+
+			SDL_UnlockTexture(GX.Texture);
+		}
+
+#if defined(SWITCH)
+		t1 = SDL_GetTicks();
+		perf_blit_ms += t1-t0;
+#endif
+
+		SDL_RenderCopy(GX.Renderer, GX.Texture, NULL, NULL);
+		SDL_RenderPresent(GX.Renderer);
+
+#if defined(SWITCH)
+		{
+			Uint32 t2 = SDL_GetTicks();
+			Uint32 present_ms = t2-t1;
+
+			perf_present_ms += present_ms;
+			perf_present_count++;
+
+			// 1s averages can hide occasional spikes; flag any single
+			// call that stalls badly so stutter shows up in the log.
+			if((t1-t0) + present_ms >= 30){
+
+				printf("[dRally.PERF.SPIKE] t=%u blit_ms=%u present_ms=%u mode=%d size=%dx%d\n",
+					t2, t1-t0, present_ms, GX.ActiveMode, GX.Surface->w, GX.Surface->h);
+			}
+		}
+
+		if(SDL_GetTicks()-perf_log_ticks >= 1000){
+
+			printf("[dRally.PERF] presents/s=%u avg_blit_ms=%.2f avg_present_ms=%.2f mode=%d size=%dx%d\n",
+				perf_present_count,
+				perf_present_count ? (double)perf_blit_ms/perf_present_count : 0.0,
+				perf_present_count ? (double)perf_present_ms/perf_present_count : 0.0,
+				GX.ActiveMode, GX.Surface->w, GX.Surface->h);
+
+			perf_present_count = 0;
+			perf_blit_ms = 0;
+			perf_present_ms = 0;
+			perf_log_ticks = SDL_GetTicks();
+		}
+#endif
+	}
 }
 
 void __VGA13_PRESENTSCREEN__(void){
@@ -126,50 +237,54 @@ void DISPLAY_CLEAR_PALETTE(void){
 }
 
 void dRally_Display_init(int mode){
-    SDL_ShowCursor(SDL_DISABLE);
-    SDL_DisableScreenSaver();
-    
-    if(!GX.VGA13.Surface){
-        switch(mode){
-            case W_SHRINK:
-                GX.WindowMode = W_SHRINK;
-                GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2+20*320, 320, 200, 8, 320, SDL_PIXELFORMAT_INDEX8);
-                break;
-            case W_LETTERBOX:
-                GX.WindowMode = W_LETTERBOX;
-                GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2, 320, 240, 8, 320, SDL_PIXELFORMAT_INDEX8);
-                break;
-            default:
-                printf("[dRally.DISPLAY] Invalid Window Mode [#%d]. Defaults to W_SHRINK [#%d]\n", mode, W_SHRINK);
-                GX.WindowMode = W_SHRINK;
-                GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2+20*320, 320, 200, 8, 320, SDL_PIXELFORMAT_INDEX8);
-                break;
-        }
-    }
-    
-    if(!GX.VESA101.Surface) GX.VESA101.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VESA101_ACTIVESCREEN, 640, 480, 8, 640, SDL_PIXELFORMAT_INDEX8);
-    
-    int flags = SDL_WINDOW_HIDDEN;
-#ifdef PSVITA
-    flags = flags | SDL_WINDOW_MAXIMIZED;
-#endif
 
-    if(!GX.Window){
-        GX.Window = SDL_CreateWindow(
-            "dRally / Open Source Engine / Death Rally",
-            SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
-            960,  /* Ancho absoluto nativo de la pantalla de la Vita */
-            544,  /* Alto absoluto nativo de la pantalla de la Vita */
-            flags
-        );
-    }
-    
-    if(!GX.Renderer){
-        GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_ACCELERATED);
-        /* FIX DEFINITIVO PANTALLA COMPLETA: Fuerza el escalado elástico por hardware de 640x480 a 960x544 */
-        SDL_RenderSetLogicalSize(GX.Renderer, 640, 480);
-    }
+	SDL_ShowCursor(SDL_DISABLE);
+	SDL_DisableScreenSaver();
+
+	if(!GX.VGA13.Surface){
+
+		switch(mode){
+		case W_SHRINK:
+			GX.WindowMode = W_SHRINK;
+			GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2+20*320, 320, 200, 8, 320, SDL_PIXELFORMAT_INDEX8);
+			break;
+		case W_LETTERBOX:
+			GX.WindowMode = W_LETTERBOX;
+			GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2, 320, 240, 8, 320, SDL_PIXELFORMAT_INDEX8);
+			break;
+		default:
+			printf("[dRally.DISPLAY] Invalid Window Mode [#%d]. Defaults to W_SHRINK [#%d]\n", mode, W_SHRINK);
+			GX.WindowMode = W_SHRINK;
+			GX.VGA13.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VGA13_ACTIVESCREEN_2+20*320, 320, 200, 8, 320, SDL_PIXELFORMAT_INDEX8);
+			break;		
+		}	
+	}
+
+	if(!GX.VESA101.Surface) GX.VESA101.Surface = SDL_CreateRGBSurfaceWithFormatFrom(VESA101_ACTIVESCREEN, 640, 480, 8, 640, SDL_PIXELFORMAT_INDEX8);
+
+	int flags = SDL_WINDOW_HIDDEN;
+#if defined(PSVITA) || defined(SWITCH)
+	flags |= SDL_WINDOW_MAXIMIZED;
+#endif // defined(PSVITA) || defined(SWITCH)
+	if(!GX.Window){
+
+		GX.Window = SDL_CreateWindow(
+			"dRally / Open Source Engine / Death Rally [1996]",                  		// window title
+			SDL_WINDOWPOS_CENTERED,      	// initial x position
+			SDL_WINDOWPOS_CENTERED,       	// initial y position
+			W_WIDTH,                  			// width, in pixels
+			W_HEIGHT,							// height, in pixels
+			flags				// flags - see below
+		);
+	}
+
+	if(!GX.Renderer){
+
+		//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+		GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_ACCELERATED);
+
+		//GX.Renderer = SDL_CreateRenderer(GX.Window, -1, SDL_RENDERER_SOFTWARE);
+	}
 }
 
 void dRally_Display_clean(void){

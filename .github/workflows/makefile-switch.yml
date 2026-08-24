@@ -1,0 +1,74 @@
+name: Makefile Switch
+
+on:
+  push:
+    branches: [ switch, main, master ] # Adjust branches as needed
+    paths: # Only run if Switch-related files or core C code changes
+      - 'Makefile.switch'
+      - 'docker/DockerfileSwitch' # Although not used directly, changes here might imply build system changes
+      - '**.c'
+      - '**.h'
+      - '.github/workflows/makefile-switch.yml'
+  pull_request:
+    branches: [ main, master, switch ] # Adjust branches as needed
+    paths:
+      - 'Makefile.switch'
+      - 'docker/DockerfileSwitch'
+      - '**.c'
+      - '**.h'
+      - '.github/workflows/makefile-switch.yml'
+
+jobs:
+  build-switch:
+    name: Build for Nintendo Switch
+    runs-on: ubuntu-20.04
+    env:
+      DEVKITPRO: /opt/devkitpro
+      DEVKITA64: /opt/devkitpro/devkitA64
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install devkitPro pacman
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y wget ca-certificates
+        wget https://apt.devkitpro.org/install-devkitpro-pacman -O ./install-dkp-pacman.sh
+        chmod +x ./install-dkp-pacman.sh
+        sudo ./install-dkp-pacman.sh
+      # Installs dkp-pacman to /usr/bin usually
+
+    - name: Install Nintendo Switch development packages
+      run: |
+        sudo dkp-pacman -Sy --noconfirm # Synchronize
+        sudo dkp-pacman -S switch-dev --noconfirm # Install base Switch tools (includes libnx)
+        # Install necessary libraries from devkitPro portlibs
+        sudo dkp-pacman -S switch-sdl2 switch-sdl2_net switch-libpng switch-libjpeg-turbo switch-zlib --noconfirm
+        # Add any other specific libraries your project needs for Switch
+
+    - name: Set up environment variables
+      run: |
+        echo "DEVKITPRO=${{ env.DEVKITPRO }}" >> $GITHUB_ENV
+        echo "DEVKITA64=${{ env.DEVKITA64 }}" >> $GITHUB_ENV
+        echo "${{ env.DEVKITPRO }}/tools/bin" >> $GITHUB_PATH
+        echo "${{ env.DEVKITA64 }}/bin" >> $GITHUB_PATH
+
+    - name: Build Switch NRO
+      working-directory: ${{ github.workspace }}
+      shell: bash # Ensure bash is used for complex commands if any
+      run: |
+        # Verify environment (optional, for debugging)
+        echo "DEVKITPRO is: $DEVKITPRO"
+        echo "DEVKITA64 is: $DEVKITA64"
+        echo "PATH is: $PATH"
+        # Attempt the build
+        make -f Makefile.switch all
+
+    # Optional: Add step to upload artifact (the .nro file)
+    # - name: Upload NRO artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: death-rally-switch-nro
+    #     path: ${{ github.workspace }}/Death_rally_switch.nro # Adjust if your TARGET name in Makefile.switch is different
+    #     if-no-files-found: error # Fails the workflow if the NRO isn't found

@@ -424,18 +424,18 @@ void ___3892ch_cdecl(__DWORD__ A1, __DWORD__ A2){
 		if(B(___1a2147h) == 1){
 
 			dRally_Sound_release();
-#ifdef PSVITA
+#if defined(PSVITA) || defined(SWITCH)
 				___10b80h_cdecl("CINEM/endani0.haf", 1, "tr0-mus.cmf", 2, "endani0e.cmf", 1, 0x78);
 				dRally_Sound_release();
-#endif
-#ifndef PSVITA
+#endif // defined(PSVITA) || defined(SWITCH)
+#if !defined(PSVITA) && !defined(SWITCH)
 				eax = GET_FILE_SIZE(strcat(strcpy(esp, ___1a0d60h), "endani0.haf"));
 				if((int)eax > 0){
 
 					___10b80h_cdecl("endani0.haf", 1, "tr0-mus.cmf", 2, "endani0e.cmf", 1, 0x78);
 					dRally_Sound_release();
 				}
-#endif // !PSVITA
+#endif // !defined(PSVITA) && !defined(SWITCH)
 
 			dRally_Sound_load(1, "MEN-MUS.CMF", 2, "MEN-SAM.CMF", 5);
 			dRally_Sound_setMusicVolume(___24cc58h_msx_volume);

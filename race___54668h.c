@@ -11,7 +11,7 @@
 	extern __POINTER__ TRX_MAS;
 	extern __POINTER__ TRX_IMA;
 	extern __BYTE__ TRX_BLO_TAB[0x100];
-	extern __BYTE__ ___2438d4h[];
+	extern int ___2438d4h;
 	extern __BYTE__ TRX_SKI_TAB[0x100];
 
 int rand_watcom106(void);
@@ -55,39 +55,63 @@ static int helper44(int idx){
 }
 
 static void helper55(int n, float * xf, float * yf, double angle){
-
+	
 	struct_35e_t * 	s_35e = (struct_35e_t *)___1e6ed0h;
 
 	angle = ((double)s_35e[n].Direction+angle)*A_PI/180.0;
-
 	*xf = (float)((double)s_35e[n].XLocation+12.0*dRMath_sin(angle));
-	*yf = (float)((double)s_35e[n].YLocation+12.0*dRMath_cos(angle)*L0_83);
+	*yf = (float)((double)s_35e[n].YLocation+12.0*dRMath_cos(angle)*L0_83);	
+}
+
+static float helper55xf(int n, double angle) {
+
+	struct_35e_t* s_35e = (struct_35e_t*)___1e6ed0h;
+
+	angle = ((double)s_35e[n].Direction + angle) * A_PI / 180.0;
+	return (float)((double)s_35e[n].XLocation + 12.0 * dRMath_sin(angle));	
+}
+
+static float helper55yf(int n, double angle) {
+
+	struct_35e_t* s_35e = (struct_35e_t*)___1e6ed0h;
+
+	angle = ((double)s_35e[n].Direction + angle) * A_PI / 180.0;
+	return (float)((double)s_35e[n].YLocation + 12.0 * dRMath_cos(angle) * L0_83);
 }
 
 // POSITION, LAP COUNTER
 void race___54668h(void){
-
+	FILE* fd;
 	int 			br0, k, n;
 	__BYTE__ 		esp[0x124];
 	float 			x1f, x2f, x3f, x4f, y1f, y2f, y3f, y4f;
 	struct_35e_t * 	s_35e;
 	struct_94_t *	s_94;
 
+	int ret;
+
 	s_35e = (struct_35e_t *)___1e6ed0h;
 	s_94 = (struct_94_t *)___1de580h;
 
 	n = -1;
 	while(++n < NUM_OF_CARS){
-
-		helper55(n, &s_35e[n].X1__10e, &s_35e[n].Y1__112, 180.0-22.0);
+		
+		
+		s_35e[n].X1__10e = helper55xf(n,  180.0 - 22.0);
+		s_35e[n].Y1__112 = helper55yf(n, 180.0 - 22.0);
+		s_35e[n].X2__11e = helper55xf(n, 180.0 + 22.0);
+		s_35e[n].Y2__122 = helper55yf(n, 180.0 + 22.0);
+		s_35e[n].X3__12e = helper55xf(n, -22.0);
+		s_35e[n].Y3__132 = helper55yf(n , -22.0);
+		s_35e[n].X4__13e = helper55xf(n, 22.0);
+		s_35e[n].Y4__142 = helper55yf(n, 22.0);
+		/*helper55(n, &s_35e[n].X1__10e, &s_35e[n].Y1__112, 180.0-22.0);
 		helper55(n, &s_35e[n].X2__11e, &s_35e[n].Y2__122, 180.0+22.0);
 		helper55(n, &s_35e[n].X3__12e, &s_35e[n].Y3__132, -22.0);
-		helper55(n, &s_35e[n].X4__13e, &s_35e[n].Y4__142, 22.0);
+		helper55(n, &s_35e[n].X4__13e, &s_35e[n].Y4__142, 22.0);*/
 
 		if(((int)s_94[n].__18 > 0)&&helper33(n, 0.55)) s_35e[n].__104 += (float)((double)(rand_watcom106()-rand_watcom106())/65536.0);
-
 		if(((int)s_35e[n].__352 <= 0)||(s_94[MY_CAR_IDX].__2C == 0)){
-
 			if(((double)(int)(s_94[n].__0+0xd) < (double)helper22(s_35e[n].__bc))||helper44(n)||helper33(n, 0.55)){
 
 				if(((s_35e[n].Ctrls[getCounter(4)]&2) == 0)||((s_35e[n].Ctrls[getCounter(4)]&0x40) == 0)){
@@ -96,10 +120,10 @@ void race___54668h(void){
 
 						if((double)(int)(s_94[n].__0+0xd) < (double)helper22(s_35e[n].__bc)){
 
-							D(___2438d4h) = (int)(2048.0*(double)helper22(s_35e[n].__bc));
+							___2438d4h = (int)(2048.0*(double)helper22(s_35e[n].__bc));
 						}
 
-						if(((int)D(___2438d4h) > 0x10000)||helper44(n)||helper33(n, 0.85)) D(___2438d4h) = 0x10000;
+						if((___2438d4h > 0x10000)||helper44(n)||helper33(n, 0.85)) ___2438d4h = 0x10000;
 					}
 
 					s_35e[n].__34a++;

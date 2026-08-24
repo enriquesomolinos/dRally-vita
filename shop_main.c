@@ -39,7 +39,7 @@ typedef struct x655_s {
 	extern __BYTE__ ___185a20h[];
 	extern __BYTE__ ___1a1ec4h[];
 	extern __BYTE__ ___185a14h_UseWeapons[];
-	extern __BYTE__ ___196ab0h[];
+	extern int PLAYER_LAPPED;
 	extern __BYTE__ ___196a98h[];
 	extern __BYTE__ ___196a9ch[];
 	extern __BYTE__ ___196aa0h[];
@@ -141,7 +141,7 @@ static __DWORD__ checkCheat(__BYTE__ * p){
 	return CHEAT_NONE;
 }
 
-#define LONGCOND ((D(___185a3ch) == 0)&&(D(___196a98h) != 3)&&(D(___196a9ch) != 1)&&(D(___196aa0h) != 1)&&(D(___196aa4h) == 0)&&(D(___196aa8h) == 0)&&(D(___196ab0h) != 1))
+#define LONGCOND ((D(___185a3ch) == 0)&&(D(___196a98h) != 3)&&(D(___196a9ch) != 1)&&(D(___196aa0h) != 1)&&(D(___196aa4h) == 0)&&(D(___196aa8h) == 0)&&(PLAYER_LAPPED != 1))
 
 // ___2b8ach
 void shop_main(void){
@@ -230,7 +230,7 @@ void shop_main(void){
 		}
 		else {
 
-			if(D(___196ab0h) == 1){
+			if(PLAYER_LAPPED == 1){
 
 				___14cach();	// LAPPED
 				D(esp+0x28) = 1;
@@ -469,7 +469,7 @@ void shop_main(void){
 			s_6c[D(___1a1ef8h)].loanshark_type = -1;
 			s_6c[D(___1a1ef8h)].loanshark_counter = -1;
 		}
-		if(D(esp+0x24) == 9) D(___196ab0h) = 0;
+		if(D(esp+0x24) == 9) PLAYER_LAPPED = 0;
 		if(D(esp+0x24) == 8){
 
 #if defined(DR_MULTIPLAYER)
@@ -493,7 +493,7 @@ void shop_main(void){
 		if(D(esp+0x30) != 0) break;
 		esi = 1;
 
-		if(D(___196ab0h) != 1){
+		if(PLAYER_LAPPED != 1){
 			if(D(___196a98h) != 3){
 				if(D(___196a9ch) != 1){
 					if(D(___196aa0h) != 1){
@@ -674,7 +674,7 @@ void shop_main(void){
 			___14cach();	// LAPPED
 			___12cb8h__VESA101_PRESENTSCREEN();
 			___17324h();
-			D(___196ab0h) = 0;
+			PLAYER_LAPPED = 0;
 			esi = 0;
 			___25330h();
 			___12cb8h__VESA101_PRESENTSCREEN();

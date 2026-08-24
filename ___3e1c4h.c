@@ -7,7 +7,7 @@ __DWORD__ GET_FILE_SIZE(const char *);
 
 #pragma pack(push,1)
 typedef struct file_s {
-    const char  name[0xd];
+    const char  name[0xff];
     __DWORD__       size;
 } file_t;
 
@@ -30,13 +30,22 @@ static file_t assets[14] = {
     { "TR8.BPA",     0x3dd12 },
     { "TR9.BPA",     0x68623 }
 };
+#ifdef PSVITA
+static file_t cinems[3] = {
 
+    { "CINEM/SANIM.HAF",   0x1485040 },
+    { "CINEM/ENDANI.HAF",  0x39ed6b },
+    { "CINEM/ENDANI0.HAF", 0x6dc2fc }
+};
+#endif
+#ifndef PSVITA
 static file_t cinems[3] = {
 
     { "SANIM.HAF",   0x1485040 },
     { "ENDANI.HAF",  0x39ed6b },
     { "ENDANI0.HAF", 0x6dc2fc }
 };
+#endif
 
 void ___3e1c4h(void){
 
@@ -45,7 +54,6 @@ void ___3e1c4h(void){
 
     n = -1;
     while(++n < 0xe){
-
         if(!(fsize = GET_FILE_SIZE(assets[n].name))){
                 
             printf("\nDEATH RALLY ERROR: File %s is not found!\n", assets[n].name);
@@ -65,8 +73,9 @@ void ___3e1c4h(void){
 
     n = -1;
     while(++n < 3){
-
-        strcpy(fpath, ___1a0d60h);
+        //TODO revisar
+        //strcpy(fpath, ___1a0d60h);
+        strcpy(fpath, "\0");
         strcat(fpath, cinems[n].name);
 
         if((fsize = GET_FILE_SIZE(fpath))&&(fsize != cinems[n].size)){

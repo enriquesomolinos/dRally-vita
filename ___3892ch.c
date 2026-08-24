@@ -424,13 +424,18 @@ void ___3892ch_cdecl(__DWORD__ A1, __DWORD__ A2){
 		if(B(___1a2147h) == 1){
 
 			dRally_Sound_release();
-
-			eax = GET_FILE_SIZE(strcat(strcpy(esp, ___1a0d60h), "endani0.haf"));
-			if((int)eax > 0){
-
-				___10b80h_cdecl("endani0.haf", 1, "tr0-mus.cmf", 2, "endani0e.cmf", 1, 0x78);
+#ifdef PSVITA
+				___10b80h_cdecl("CINEM/endani0.haf", 1, "tr0-mus.cmf", 2, "endani0e.cmf", 1, 0x78);
 				dRally_Sound_release();
-			}
+#endif
+#ifndef PSVITA
+				eax = GET_FILE_SIZE(strcat(strcpy(esp, ___1a0d60h), "endani0.haf"));
+				if((int)eax > 0){
+
+					___10b80h_cdecl("endani0.haf", 1, "tr0-mus.cmf", 2, "endani0e.cmf", 1, 0x78);
+					dRally_Sound_release();
+				}
+#endif // !PSVITA
 
 			dRally_Sound_load(1, "MEN-MUS.CMF", 2, "MEN-SAM.CMF", 5);
 			dRally_Sound_setMusicVolume(___24cc58h_msx_volume);
@@ -519,12 +524,12 @@ void ___3892ch_cdecl(__DWORD__ A1, __DWORD__ A2){
 			strcat(esp, ___1a0d60h);
 			strcat(esp, "endani0.haf");
 			eax = GET_FILE_SIZE(esp);
+			// TODO FIX
+			//if((int)eax > 0){
 
-			if((int)eax > 0){
-
-				___10b80h_cdecl("endani0.haf", 0x1, "tr0-mus.cmf", 0x2, "endani0e.cmf", 1, 0x78);
+				___10b80h_cdecl("CINEM/endani0.haf", 0x1, "tr0-mus.cmf", 0x2, "endani0e.cmf", 1, 0x78);
 				dRally_Sound_release();
-			}
+			//}
 
 			dRally_Sound_load(0x1, "MEN-MUS.CMF", 0x2, "MEN-SAM.CMF", 5);
 			dRally_Sound_setMusicVolume(___24cc58h_msx_volume);

@@ -1,0 +1,39 @@
+FROM ubuntu:bionic
+MAINTAINER Enrique Somolinos "enrique.somolinos@gmail.com"
+RUN dpkg --add-architecture i386 
+
+
+RUN apt-get clean && apt-get update && apt-get install -y software-properties-common 
+RUN  add-apt-repository -r ppa:jonathonf/gcc-7.1
+
+RUN apt-get update -q
+RUN  apt-get install -y  gdb libc6-i386 gcc-7-multilib gcc-multilib g++-7-multilib g++-multilib xorg-dev libsdl1.2-dev:i386 \
+    libsdl1.2debian:i386 freeglut3-dev:i386 freeglut3:i386 libglu1-mesa:i386 libglu1-mesa-dev mesa-utils \
+    mesa-common-dev libx11-dev libgl1-mesa-glx build-essential libgl1-mesa-dev libgl1-mesa-glx:i386
+RUN  apt-get install -y wget &&   wget https://zdoom.org/files/fmod/fmodapi375linux.tar.gz && \
+    tar -xf fmodapi375linux.tar.gz && \
+    cp fmodapi375linux/api/libfmod-3.75.so /usr/lib && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/*
+
+#ADD run /usr/local/bin/netbeans
+ 
+#chmod +x /usr/local/bin/netbeans && \
+###RUN    mkdir -p /home/developer && \
+#    echo "developer:x:1000:1000:Developer,,,:/home/developer:/bin/bash" >> /etc/passwd && \
+#    echo "developer:x:1000:" >> /etc/group && \
+#    echo "developer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/developer && \
+#    chmod 0440 /etc/sudoers.d/developer && \
+#    chown developer:developer -R /home/developer
+WORKDIR /dreerally
+CMD /dreerally
+
+ADD . /dreerally
+CMD sleep 999999999
+#RUN make -f Makefile.linux
+#USER developer
+#ENV HOME /home/developer
+#WORKDIR /home/developer
+#ENTRYPOINT /bin/bash
+#CMD /dreerally/dreerally

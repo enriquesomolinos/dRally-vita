@@ -11,7 +11,7 @@
 	extern __POINTER__ ___1a1108h;
 	extern __BYTE__ ___1a01e0h[];
 	extern __BYTE__ ___1a1ef8h[];
-	extern __BYTE__ ___196ab0h[];
+	extern int PLAYER_LAPPED;
 	extern __POINTER__ ___1a0fb0h;
 	extern __BYTE__ ___185c7ah[];
 	extern __POINTER__ ___1a10b8h;
@@ -86,7 +86,7 @@ void ___36068h_cdecl(__DWORD__ A1){
 
 		if((A1 == 0)&&(s_6c[B(esp+n)].damage != 0x64)){
 
-			if((B(esp+n) == D(___1a1ef8h))&&(D(___196ab0h) == 1)) break;
+			if((B(esp+n) == D(___1a1ef8h))&&(PLAYER_LAPPED == 1)) break;
 
 			j = -1;
 			while(++j < 0x12){
@@ -99,7 +99,7 @@ void ___36068h_cdecl(__DWORD__ A1){
 			}
 		}
 
-		if((s_6c[B(esp+n)].damage != 0x64)&&((B(esp+n) != D(___1a1ef8h))||(D(___196ab0h) != 1))){
+		if((s_6c[B(esp+n)].damage != 0x64)&&((B(esp+n) != D(___1a1ef8h))||(PLAYER_LAPPED != 1))){
 
 			s_6c[B(esp+n)].points += EasyPoints[n];
 			___12e78h_cdecl(___1a10b8h, (font_props_t *)___185c7ah, fmtPoints(EasyPoints[n]), 0x280*(0x13*B(esp+n)+0x59)+0xe6);

@@ -1,0 +1,13 @@
+FROM gnuton/vitasdk-docker
+
+RUN export VITASDK=/usr/local/vitasdk # define $VITASDK if you haven't already
+RUN export PATH=$VITASDK/bin:$PATH # add vitasdk tool to $PATH if you haven't already
+
+RUN apt update -y
+RUN apt install -y  libsdl1.2-dev libsdl2-dev
+
+WORKDIR /dreerally
+CMD /dreerally
+
+ADD . /dreerally
+CMD sleep 999999999

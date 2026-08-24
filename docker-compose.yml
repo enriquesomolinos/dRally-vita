@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  server:
+    build:
+      context: ./docker
+      dockerfile: DockerfilePsvita      
+    container_name: dreerally-dev-container
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/dreerally:cached 
+ 
+   
+   

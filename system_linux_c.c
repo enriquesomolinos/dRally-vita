@@ -1,4 +1,6 @@
 #include "drally.h"
+#include <psp2/power.h>
+
 
 #pragma pack(1)
 

@@ -1,56 +1,111 @@
-# dRally Vita 
 
-* Based on work of urpx : https://github.com/urxp/dRally
-* Based on EnriqueSomolinos port for psvita : https://github.com/enriquesomolinos/dRally-vita
 
-🎮 Installation Guide
+# Death Rally Vita - Performance & Control Edition
 
-Step 1: Install the Game App
+An optimized performance and control fork of **Death Rally** for the PlayStation Vita.
 
-Download and install the .vpk file on your PlayStation Vita using VitaShell.
+## 👥 Credits & Acknowledgments
 
-Step 2: Prepare the Data Files
+This project is based on the incredible work of the original developers and the open-source community:
 
-Download death rally data template.zip from the Releases section.
+* **Original PS Vita Port:** Developed by **Enrique Somolinos**.
+* **Open Source Engine:** Based on the source code reconstruction by **urxp**.
 
-Extract it and copy the data folder directly into the root of your ux0: partition.
+---
 
-This automatically creates the path ux0:data/DERA00002/DATA/ with the pre-configured cdrom.ini.
+## 🎮 Installation Guide
 
-Step 3: 
+### Step 1: Install the Game App
 
-Open your Death Rally installation folder on your PC (via Steam).
+Download and install the `.vpk` file on your PlayStation Vita using VitaShell.
 
-Copy all the game files from your PC.
+### Step 2: Prepare the Data Files
 
-Paste them directly inside ux0:data/DERA00002/DATA/ on your Vita.
+Download the **Death Rally data template** from the Releases section.
 
-Step 4:
+Extract it and copy the `data` folder to the root of your `ux0:` partition.
 
-Inside the DATA folder on your Vita, locate the 3 files ending in .HAF.
-Move those 3 .HAF files into the CINEM folder.
-````
-Ux0:data/DERA00002/DATA
-    |--/CINEM
-    |  |--ENDANI.HAF
-    |  |--ENDANI0.HAF
-    |  |--SANIM.HAF
-	|--CDROM.INI        [1]
-    |--ENGINE.BPA
-    |--IBFILES.BPA
-    |--MENU.BPA
-    |--MUSICS.BPA
-    |--TR[0-9].BPA
+This creates:
 
-	[1] CDROM.INI contains relative location of CINEM directory (./CINEM)
-`````
+`ux0:data/DERA00002/DATA/`
+
+with the required configuration.
+
+### Step 3: Copy the Original Game Files
+
+Open your legally obtained Death Rally installation on your PC.
+
+Copy the required original game files into:
+
+`ux0:data/DERA00002/DATA/`
+
+### Step 4: Move the Cinematic Files
+
+Inside the `DATA` folder, locate the three `.HAF` files used by the game's cinematics.
+
+Move them into the `CINEM` folder.
+
+The resulting structure should look like:
+
+```text
+ux0:data/DERA00002/DATA/
+    ├── CINEM/
+    │   ├── ENDANI.HAF
+    │   ├── ENDANI0.HAF
+    │   └── SANIM.HAF
+    ├── CDROM.INI
+    ├── ENGINE.BPA
+    ├── IBFILES.BPA
+    ├── MENU.BPA
+    ├── MUSICS.BPA
+    └── TR[0-9].BPA
+
 🎮 Native Control Layout
-Once the custom dr.cfg is placed in the data folder, the handheld controls will map as follows:
-````
-D-Pad: Smooth and continuous steering (fixed the legacy tap-steering bug).
+
+Once the custom dr.cfg is installed, the controls are mapped as follows:
+
+D-Pad: Smooth and continuous steering.
 R Trigger: Accelerate.
 L Trigger: Brake / Reverse.
-X (Cross): Nitro / Turbo (Also acts as Keypad-Enter for general menu navigation).
-Square (□): Shoot main weapons.
+X (Cross): Nitro / Turbo and menu confirmation.
+Square (□): Shoot main weapons. exit race "y" key
 Circle (○): Drop mines.
-Triangle (△): Horn / Native Exit Shortcut (Sends 'Y' key to instantly quit races in the pause overlay).
+Triangle (△): Horn / space 
+Bypassing the Name / Save Profile Screens
+
+The original game expects keyboard input for some text-entry screens.
+
+On the Vita:
+
+Press Triangle (△) when the game asks for a name.
+Press X (Cross) to confirm.
+
+This allows the profile/save screen to be bypassed without an external keyboard.
+
+📦 Required Original Game Files
+
+This VPK does not contain copyrighted game assets such as graphics, music, or levels.
+
+You must provide the original Death Rally game files legally.
+
+The original PC/Steam version can be used to obtain the required files.
+
+Required files
+
+Copy the required .BPA files and IBOUNDS.DAT into:
+
+ux0:data/DERA00002/DATA/
+
+🛠️ Changelog
+Performance
+Removed the legacy artificial frame delays from __GET_FRAME_COUNTER, improving input responsiveness and frame pacing.
+Added ARM NEON compiler optimizations for the Vita hardware.
+Improved overall performance of vehicle physics and rendering.
+Controls
+Fixed the legacy D-Pad tap-steering behavior.
+D-Pad steering is now smooth and continuous while the direction is held.
+Added native Vita button mappings for acceleration, braking, weapons, mines and turbo.
+Added a shortcut for exiting/retiring from the race pause menu.
+Gameplay Fixes
+Fixed the pickup spawning logic so turbos, ammunition and other race items can spawn correctly during races.
+Fixed a crash occurring after defeating the Adversary and completing the final cinematic, before the final race-results screen.

@@ -21,9 +21,9 @@ Download and install the `.vpk` file on your PlayStation Vita using VitaShell.
 
 ### Step 2: Prepare the Data Files
 
-Download the **Death Rally data template** from the Releases section.
+Download the DERA00002.zip from the Releases section.
 
-Extract it and copy the `data` folder to the root of your `ux0:` partition.
+Extract it in ux0:data/
 
 This creates:
 

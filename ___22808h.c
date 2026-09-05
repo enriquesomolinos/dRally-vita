@@ -47,16 +47,20 @@ void ___22808h(void){
 	__POINTER__ 	esi;
 	__BYTE__ 	esp[0x70];
 	int 		i, k, n;
-	racer_t * 	s_6c;
+	
+racer_t * s_6c;
+
+s_6c = (racer_t *)___1a01e0h;
 
 #ifdef PSVITA
-	___10b80h_cdecl("CINEM/endani.haf", 1, "tr0-mus.cmf", 2, "endani-e.cmf", 1, 0x78);
-#endif // PSVITA
+    ___10b80h_cdecl("CINEM/endani.haf", 1, "tr0-mus.cmf", 2, "endani-e.cmf", 1, 0x78);
+#endif
+
 #ifndef PSVITA
-	s_6c = (racer_t *)___1a01e0h;
-	strcat(strcpy(esp, ___1a0d60h), "endani.haf");
-	if(GET_FILE_SIZE(esp) != 0) ___10b80h_cdecl("endani.haf", 1, "tr0-mus.cmf", 2, "endani-e.cmf", 1, 0x78);
-#endif // PSVITA
+    strcat(strcpy(esp, ___1a0d60h), "endani.haf");
+    if(GET_FILE_SIZE(esp) != 0)
+        ___10b80h_cdecl("endani.haf", 1, "tr0-mus.cmf", 2, "endani-e.cmf", 1, 0x78);
+#endif
 
 	___606dfh();
 	__VESA101_SETMODE();

@@ -290,6 +290,9 @@ void race___3f970h(void){
 		if(strcmp(___1de7d0h[n].raw, "DUKE NUKEM") == 0) D(___1de580h[n].raw+0x1c) = (int)(2.2*(double)D(___1de580h[n].raw+0x1c));
 
 		if((int)D(___1de580h[n].raw+0x1c) > 0x384) D(___1de580h[n].raw+0x1c) = 0x384;
+
+
+
 		D(___1de580h[n].raw+0x18) = 0x400*(0x64-D(___1de7d0h[n].raw+0x10));
 		D(___1de580h[n].raw+0x20) = D(___1de7d0h[n].raw+0x20);
 		D(___1de580h[n].raw+0x24) = D(___1de7d0h[n].raw+0x24);
@@ -377,6 +380,7 @@ void race___3f970h(void){
 			D(___1de580h[0].raw+0x18) = 0x400*(0x64-D(___1de7d0h[0].raw+0x10));
 
 			if((int)D(___1de580h[0].raw+0x1c) > 0x384) D(___1de580h[0].raw+0x1c) = 0x384;
+
 
 			F32(___1de580h[0].raw+0x10) = ___3f6c0h_floats[3];
 			D(___1de580h[0].raw+0x30) = D(___1de580h[0].raw+0x34) = 512*200;
